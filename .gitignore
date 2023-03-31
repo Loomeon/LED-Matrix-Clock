@@ -1,0 +1,5 @@
+/cmake-build-debug/
+/cmake-build-raspberry-pi-pico/
+/pico_sdk_import.cmake
+/.DS_Store
+/.idea  
