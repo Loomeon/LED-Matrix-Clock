@@ -13,21 +13,22 @@
 
 class max7219 {
 public:
-    max7219(int Data, int Clock, int Load);
-    void power_on();
-    void power_off();
-    void Display_test();
-    void Matrix_clear();
-    void Matrix_set(int x, int y);
-    void Matrix_unset(int x, int y);
-    void Matrix_refresh();
-    void Matrix_decode_mode();
+    max7219(int Data, int Clock, int Load); //Class constructor
+    void power_state(bool state);
+    void Display_test(bool state);
+    void clear();
+    void Matrix_set(int x, int y, bool state);
+    void refresh();
+    void decode_mode(int mode);
+    void test_pattern();
+    void intensity(int brightnes);
+    void digits(int number_of_digits);
 
 private:
     int Data_Pin;
     int Clock_Pin;
     int Load_Pin;
-    bool Matrix_State[8][8];
+    bool Matrix_dot[8][8];
 
     unsigned short int Address_dec;
     unsigned short int Data_dec;

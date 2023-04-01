@@ -22,8 +22,16 @@ int main() {
 
     max7219 Matrix(0, 2, 1);
 
+    //Init the Matrix Display
+    Matrix.power_state(true);
+    Matrix.decode_mode(0x00);
+    Matrix.clear();
+    Matrix.digits(0x7);
+    Matrix.intensity(0x00);
 
-    Matrix.Display_test();
 
-
+    while(1){
+        Matrix.test_pattern();
+        Matrix.clear();
+    }
 }
