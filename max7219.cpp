@@ -53,20 +53,18 @@ void max7219::send_Data() {
 
     for (int i = 0; i < 8; ++i) {
         gpio_put(Clock_Pin, false); //Disable Read on the max7219
-        sleep_ms(1);
+        sleep_us(1);
         gpio_put(Data_Pin, Address_bin[i]); //set the Data Pin to value
-        sleep_ms(1);
+        sleep_us(1);
         gpio_put(Clock_Pin, true); //Enable Read on the max7219
-
     }
 
     for (int i = 0; i < 8; ++i) {
         gpio_put(Clock_Pin, false); //Disable Read on the max7219
-        sleep_ms(1);
+        sleep_us(1);
         gpio_put(Data_Pin, Data_bin[i]); //set the Data Pin to value
-        sleep_ms(1);
+        sleep_us(1);
         gpio_put(Clock_Pin, true); //Enable Read on the max7219
-
     }
 
     gpio_put(Load_Pin, true); //Load the Bits into the max7219
@@ -122,8 +120,6 @@ void max7219::refresh() {
             else{
                 Data_bin[y] = false;
             }
-
-
         }
 
         convert_Data_to_binary();
@@ -142,32 +138,39 @@ void max7219::decode_mode(int mode) {
 
 void max7219::test_pattern() {
 
+    //Go through all Digits / Rows
     for (int i = 1; i <= 8; ++i) {
-        Address_dec = i; //Set Address to "Decode Mode"
+        //Convert the Address into binary
+        Address_dec = i;
         convert_Address_to_binary();
+
+        //Go through all columns
         for (int j = 0; j < 256; ++j) {
-            Data_dec = j; //Set Decode Mode to "No decode"
-
-
+            //Convert the Data into binary and send Address and Data
+            Data_dec = j;
             convert_Data_to_binary();
             send_Data();
+
+            sleep_ms(5);
         }
     }
 }
 
-void max7219::intensity(int brightnes){
-    Address_dec = 0x0A;
-    Data_dec = brightnes;
+void max7219::intensity(int brightness){
+    Address_dec = 0x0A; //Set Address to "Intensity"
+    Data_dec = brightness;
 
+    //Convert and send Address and Data
     convert_Address_to_binary();
     convert_Data_to_binary();
     send_Data();
 }
 
 void max7219::digits(int Mode) {
-    Address_dec = 0x0B;
+    Address_dec = 0x0B; //Set Address to "Scan Limit"
     Data_dec = Mode;
 
+    //Convert and send Address and Data
     convert_Address_to_binary();
     convert_Data_to_binary();
     send_Data();
