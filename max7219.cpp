@@ -9,11 +9,123 @@ max7219::max7219(int Data, int Clock, int Load){
     Data_Pin = Data;
     Clock_Pin = Clock;
     Load_Pin = Load;
-
-    //Clear the Display
-    clear();
 }
 
+/* Signal
+ * The MAX7219 is controlled with a Data, Clock and Load signal
+ *
+ * Transfer Address fist, then Data (MSB first)
+ *
+ * Load has to be low
+ * Everytime clk is high, the state from Data is moved to the shift register
+ * When Load is high, everything from the shift register is loaded
+ */
+
+/* Register Overview
+ * 0x0 - No-Op
+ * 0x1 - Digit 0
+ * 0x2 - Digit 1
+ * 0x3 - Digit 2
+ * 0x4 - Digit 3
+ * 0x5 - Digit 4
+ * 0x6 - Digit 5
+ * 0x7 - Digit 6
+ * 0x8 - Digit 7
+ * 0x9 - Decode Mode
+ * 0xA - Intensity
+ * 0xB - Scan Limit
+ * 0xC - Shutdown
+ * 0xD - Nothing
+ * 0xE - Nothing
+ * 0xF - Display Test
+ */
+
+//Setting Register------------------------------------------------------------------------------------------------------
+
+void max7219::decode_mode(int mode) {
+    /* Decode-Mode Register (0x9) - Values
+     * 0x0 - No Decode for Digits 0-7
+     * 0x1 - Code B Decode for Digits 1-7
+     * 0x2 - Code B Decode for Digits 4-7
+     * 0x3 - Code B Decode for Digits 0-7
+     */
+
+    Address_dec = 0x09; //Set Address to "Decode Mode"
+    Data_dec = mode;
+
+    convert_Address_to_binary();
+    convert_Data_to_binary();
+    send_Data();
+}
+
+void max7219::intensity(int brightness){
+    /* Intensity Register (0xA) - Values
+     * 0x0 - Minimum Intensity
+     * ... (All Values in between)
+     * 0xF - Maximum Intensity
+     */
+
+    Address_dec = 0x0A; //Set Address to "Intensity"
+    Data_dec = brightness;
+
+    //Convert and send Address and Data
+    convert_Address_to_binary();
+    convert_Data_to_binary();
+    send_Data();
+}
+
+void max7219::digits(int Mode) {
+    /* Scan-Limit Register (0xB) - Values
+     * 0x0 - Only Display Digit 0
+     * 0x1 - Display Digit 0 1
+     * 0x2 - Display Digit 0 1 2
+     * 0x3 - Display Digit 0 1 2 3
+     * 0x4 - Display Digit 0 1 2 3 4
+     * 0x5 - Display Digit 0 1 2 3 4 5
+     * 0x6 - Display Digit 0 1 2 3 4 5 6
+     * 0x7 - Display Digit 0 1 2 3 4 5 6 7
+     */
+
+    Address_dec = 0x0B; //Set Address to "Scan Limit"
+    Data_dec = Mode;
+
+    //Convert and send Address and Data
+    convert_Address_to_binary();
+    convert_Data_to_binary();
+    send_Data();
+}
+
+void max7219::power_state(bool state){
+    /* Shutdown Register (0xC) - Values
+     * 0x0 - Shutdown Mode
+     * 0x1 - Normal Operation
+     */
+
+    Address_dec = 0x0C; //Set Address to "Shutdown"
+    Data_dec = state; //Set Data to "Shutdown Mode"
+
+    //convert and transfer Data and Address
+    convert_Address_to_binary();
+    convert_Data_to_binary();
+    send_Data();
+}
+
+void max7219::Display_test(bool state) {
+    /* Display-Test Register (0xF) - Values
+     * 0x0 - 0x0 - Normal Operation
+     * 0x1 - Display Test Mode
+     */
+
+    Address_dec = 0x0F; //Set Address to "Shutdown"
+    Data_dec = state; //Set Data to "Shutdown Mode"
+
+    //convert and transfer Data and Address
+    convert_Address_to_binary();
+    convert_Data_to_binary();
+    send_Data();
+}
+
+//Converting and Transferring functions --------------------------------------------------------------------------------
 
 void max7219::convert_Address_to_binary(){
     int bit_selector = 1; // 0b00000001
@@ -70,36 +182,30 @@ void max7219::send_Data() {
     gpio_put(Load_Pin, true); //Load the Bits into the max7219
 }
 
-void max7219::power_state(bool state){
-    Address_dec = 0xC; //Set Address to "Shutdown"
-    Data_dec = state; //Set Data to "Shutdown Mode"
+//Matrix Functions -----------------------------------------------------------------------------------------------------
 
-    //convert and transfer Data and Address
-    convert_Address_to_binary();
-    convert_Data_to_binary();
-    send_Data();
+void max7219::init_8x8_Matrix() {
+    //Init the Matrix Display
+    power_state(true); //turn on the Display
+    decode_mode(0x00); //use no decode mode
+    digits(0x7); //Use all 8 Lines of the Matrix
+    intensity(0x00); //Use the lowest brightness
+
+    Matrix_clear(); //clear the Matrix
+    refresh(); //Send the empty Matrix Array to the Display
 }
 
-void max7219::Display_test(bool state) {
-    Address_dec = 0xF; //Set Address to "Shutdown"
-    Data_dec = state; //Set Data to "Shutdown Mode"
-
-    //convert and transfer Data and Address
-    convert_Address_to_binary();
-    convert_Data_to_binary();
-    send_Data();
-}
-
-void max7219::clear() {
-
-    Data_dec=0;
-    convert_Data_to_binary();
-
-    for (int i = 1; i <= 8; ++i) {
-        Address_dec = i;
-
+void max7219::Matrix_clear() {
+    for (int x = 0; x < 8; ++x) {
+        Address_dec = x+1;
         convert_Address_to_binary();
-        send_Data();
+
+        for (int y = 0; y < 8; ++y) {
+            Matrix_set(x,y,false);
+
+            convert_Data_to_binary();
+            send_Data();
+        }
     }
 }
 
@@ -108,33 +214,23 @@ void max7219::Matrix_set(int x, int y, bool state) {
 }
 
 void max7219::refresh() {
-
-    for (int x = 0; x < 7; ++x) {
-        Address_dec = x+1;
+    for (int y = 0; y < 8; ++y) {
+        Address_dec = y+1;
         convert_Address_to_binary();
 
-        for (int y = 0; y < 7; ++y) {
+        for (int x = 0; x < 8; ++x) {
             if(Matrix_dot[x][y]){
-                Data_bin[y] = true;
+                Data_bin[x] = true;
             }
             else{
-                Data_bin[y] = false;
+                Data_bin[x] = false;
             }
         }
-
-        convert_Data_to_binary();
         send_Data();
     }
 }
 
-void max7219::decode_mode(int mode) {
-    Address_dec = 0x9; //Set Address to "Decode Mode"
-    Data_dec = mode; //Set Decode Mode to "No decode"
-
-    convert_Address_to_binary();
-    convert_Data_to_binary();
-    send_Data();
-}
+//Other ----------------------------------------------------------------------------------------------------------------
 
 void max7219::test_pattern() {
 
@@ -154,24 +250,4 @@ void max7219::test_pattern() {
             sleep_ms(5);
         }
     }
-}
-
-void max7219::intensity(int brightness){
-    Address_dec = 0x0A; //Set Address to "Intensity"
-    Data_dec = brightness;
-
-    //Convert and send Address and Data
-    convert_Address_to_binary();
-    convert_Data_to_binary();
-    send_Data();
-}
-
-void max7219::digits(int Mode) {
-    Address_dec = 0x0B; //Set Address to "Scan Limit"
-    Data_dec = Mode;
-
-    //Convert and send Address and Data
-    convert_Address_to_binary();
-    convert_Data_to_binary();
-    send_Data();
 }

@@ -1,28 +1,30 @@
 //
 // Created by Paul Weber on 31.03.23.
 //
-#include "hardware/rtc.h"
-#include "pico/util/datetime.h"
-#include "hardware/gpio.h"
-#include "pico/multicore.h"
 
+
+#include "hardware/gpio.h"
+#include "pico/stdlib.h"
+
+//This is a Raspberry Pi Pico driver for the MAX7219 chip
+//My focus was to control a LED Matrix, but it is possible to extend the code to work as a driver for 7 Segment Displays
 
 #ifndef MATRIX_CLOCK_MAX7219_H
 #define MATRIX_CLOCK_MAX7219_H
-
 
 class max7219 {
 public:
     max7219(int Data, int Clock, int Load); //Class constructor
     void power_state(bool state); //Set the Display power state to true = on and false = off
     void Display_test(bool state); //Turn on all dots true = test mode on and false = test mode off
-    void clear(); //Set all Dots to off
+    void Matrix_clear(); //Set all Dots to off
     void Matrix_set(int x, int y, bool state); //turn a specific dot with x y coordinates true = on or false = off
     void refresh(); //send the current array of dots to the LED Matrix
     void decode_mode(int mode); //set the Decode Mode
     void test_pattern(); //go through all possible states of every digit
     void intensity(int brightness); //set brightness 0-15
     void digits(int number_of_digits); //Number of active digits 0-6
+    void init_8x8_Matrix(); //Configures everything for a 8x8 LED Matrix
 
 private:
     int Data_Pin; //Pin for the Data transfer
@@ -39,6 +41,5 @@ private:
     void convert_Address_to_binary(); //Converts the hex or dec Address intro binary
     void convert_Data_to_binary(); //Converts the hex or dec Data into binary
 };
-
 
 #endif //MATRIX_CLOCK_MAX7219_H
