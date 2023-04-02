@@ -25,6 +25,7 @@ public:
     void intensity(int brightness); //set brightness 0-15
     void digits(int number_of_digits); //Number of active digits 0-6
     void init_8x8_Matrix(); //Configures everything for a 8x8 LED Matrix
+    void import_Matrix(bool *import);
 
 private:
     int Data_Pin; //Pin for the Data transfer

@@ -10,6 +10,7 @@
 #include "hardware/gpio.h"
 #include "pico/multicore.h"
 #include "max7219.h"
+#include "Matrix_Numbers.h"
 
 int main() {
     gpio_init(0);
@@ -21,20 +22,37 @@ int main() {
     gpio_set_dir(2 , GPIO_OUT);
 
     max7219 Matrix(0, 2, 1);
+    Matrix_Numbers Numbers;
+
+    Matrix.init_8x8_Matrix();
+
+
+    bool *transfer = new bool[64];
+
+
+
+
+
+
 
 
 
     while(1){
-        for (int i = 0; i < 8; ++i) {
-            for (int j = 0; j < 8; ++j) {
-                Matrix.Matrix_set(j, i, true);
-                Matrix.refresh();
-                sleep_ms(50);
-            }
+        for (int i = 0; i < 10; ++i) {
+            Numbers.update_qudrant(i, 0);
+            Numbers.update_qudrant(i, 1);
+            Numbers.update_qudrant(i, 2);
+            Numbers.update_qudrant(i, 3);
+
+            Numbers.export_array(transfer);
+            Matrix.import_Matrix(transfer);
+
+            Matrix.refresh();
+
+            sleep_ms(1000);
         }
 
-        Matrix.Matrix_clear();
-        Matrix.refresh();
+
 
 
 

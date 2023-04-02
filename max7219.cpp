@@ -251,3 +251,12 @@ void max7219::test_pattern() {
         }
     }
 }
+
+void max7219::import_Matrix(bool *import) {
+
+    for (int x = 0; x < 8; ++x) {
+        for (int y = 0; y < 8; ++y) {
+             Matrix_dot[x][y] = *(import+x+y*8);
+        }
+    }
+}
