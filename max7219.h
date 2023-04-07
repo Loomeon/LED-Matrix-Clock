@@ -12,9 +12,9 @@
 #ifndef MATRIX_CLOCK_MAX7219_H
 #define MATRIX_CLOCK_MAX7219_H
 
-class max7219 {
+class MAX7219 {
 public:
-    max7219(int Data, int Clock, int Load); //Class constructor
+    MAX7219(int Data, int Clock, int Load); //Class constructor
     void power_state(bool state_seg0, bool state_seg1, bool state_seg2, bool state_seg3); //Set the Display power state to true = on and false = off
     void Display_test(bool state_seg0, bool state_seg1, bool state_seg2, bool state_seg3); //Turn on all dots true = test mode on and false = test mode off
     void Matrix_clear(int segment); //Set all Dots to off
@@ -31,10 +31,10 @@ private:
     int Data_Pin; //Pin for the Data transfer
     int Clock_Pin; //Pin for Clock signal
     int Load_Pin; //Pin for Load signal
-    bool Matrix_dot[8][8]; //Matrix with states for all dots
+    bool Matrix_dot[8][8]{}; //Matrix with states for all dots
 
-    bool Address_bin[4][8]; //Address as a bool string (acts as a byte 0 = MSB, 7 = LSB)
-    bool Data_bin[4][8]; //Data as a bool string (acts as a byte 0 = MSB, 7 = LSB)
+    bool Address_bin[4][8]{}; //Address as a bool string (acts as a byte 0 = MSB, 7 = LSB)
+    bool Data_bin[4][8]{}; //Data as a bool string (acts as a byte 0 = MSB, 7 = LSB)
 
     void send_Data(); //Sends Address and Data
     void convert_Address_to_binary(int Address, int segment); //Converts the hex or dec Address intro binary

@@ -10,7 +10,19 @@
 #include "hardware/gpio.h"
 #include "pico/multicore.h"
 #include "max7219.h"
-#include "Matrix_Numbers.h"
+#include "Segment_States.h"
+
+//Structure to store the Time and Date
+datetime_t time = {
+        .year  = 2022,
+        .month = 9,
+        .day   = 17,
+        .dotw  = 6,
+        .hour  = 12,
+        .min   = 00,
+        .sec   = 00
+};
+
 
 int main() {
     gpio_init(0);
@@ -21,13 +33,12 @@ int main() {
     gpio_set_dir(1 , GPIO_OUT);
     gpio_set_dir(2 , GPIO_OUT);
 
-    max7219 Matrix(0, 2, 1);
-    Matrix_Numbers Matrix_Numbers;
+    MAX7219 Matrix(0, 2, 1);
+    Segment_States Segments;
 
     Matrix.init_8x8_Matrix();
-    Matrix_Numbers.set_time(1, 2, 3, 4);
-    Matrix.send_Data_decimal(Matrix_Numbers.Matrix_dots);
-
+    Segments.set_time(time.hour, time.min);
+    Matrix.send_Data_decimal(Segments.Matrix_dots);
 
     while(1){
 

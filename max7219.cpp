@@ -3,7 +3,7 @@
 //
 
 #include "max7219.h"
-max7219::max7219(int Data, int Clock, int Load){
+MAX7219::MAX7219(int Data, int Clock, int Load){
 
     //Copy the GPIO PINS
     Data_Pin = Data;
@@ -42,7 +42,7 @@ max7219::max7219(int Data, int Clock, int Load){
 
 //Setting Register------------------------------------------------------------------------------------------------------
 
-void max7219::decode_mode(int mode_seg0, int mode_seg1, int mode_seg2, int mode_seg3) {
+void MAX7219::decode_mode(int mode_seg0, int mode_seg1, int mode_seg2, int mode_seg3) {
     /* Decode-Mode Register (0x9) - Values
      * 0x0 - No Decode for Digits 0-7
      * 0x1 - Code B Decode for Digits 1-7
@@ -64,7 +64,7 @@ void max7219::decode_mode(int mode_seg0, int mode_seg1, int mode_seg2, int mode_
     send_Data();
 }
 
-void max7219::intensity(int brightness_seg0, int brightness_seg1, int brightness_seg2, int brightness_seg3){
+void MAX7219::intensity(int brightness_seg0, int brightness_seg1, int brightness_seg2, int brightness_seg3){
     /* Intensity Register (0xA) - Values
      * 0x0 - Minimum Intensity
      * ... (All Values in between)
@@ -86,7 +86,7 @@ void max7219::intensity(int brightness_seg0, int brightness_seg1, int brightness
     send_Data();
 }
 
-void max7219::digits(int Mode_seg0, int Mode_seg1, int Mode_seg2, int Mode_seg3) {
+void MAX7219::digits(int Mode_seg0, int Mode_seg1, int Mode_seg2, int Mode_seg3) {
     /* Scan-Limit Register (0xB) - Values
      * 0x0 - Only Display Digit 0
      * 0x1 - Display Digit 0 1
@@ -115,7 +115,7 @@ void max7219::digits(int Mode_seg0, int Mode_seg1, int Mode_seg2, int Mode_seg3)
     send_Data();
 }
 
-void max7219::power_state(bool state_seg0, bool state_seg1, bool state_seg2, bool state_seg3){
+void MAX7219::power_state(bool state_seg0, bool state_seg1, bool state_seg2, bool state_seg3){
     /* Shutdown Register (0xC) - Values
      * 0x0 - Shutdown Mode
      * 0x1 - Normal Operation
@@ -135,7 +135,7 @@ void max7219::power_state(bool state_seg0, bool state_seg1, bool state_seg2, boo
     send_Data();
 }
 
-void max7219::Display_test(bool state_seg0, bool state_seg1, bool state_seg2, bool state_seg3) {
+void MAX7219::Display_test(bool state_seg0, bool state_seg1, bool state_seg2, bool state_seg3) {
     /* Display-Test Register (0xF) - Values
      * 0x0 - 0x0 - Normal Operation
      * 0x1 - Display Test Mode
@@ -157,7 +157,7 @@ void max7219::Display_test(bool state_seg0, bool state_seg1, bool state_seg2, bo
 
 //Converting and Transferring functions --------------------------------------------------------------------------------
 
-void max7219::convert_Address_to_binary(int Address, int segment){
+void MAX7219::convert_Address_to_binary(int Address, int segment){
     int bit_selector = 1; // 0b00000001
 
     //Go through all 8 Bits
@@ -173,7 +173,7 @@ void max7219::convert_Address_to_binary(int Address, int segment){
     }
 }
 
-void max7219::convert_Data_to_binary(int Data, int segment){
+void MAX7219::convert_Data_to_binary(int Data, int segment){
     int bit_selector = 1; // 0b00000001
 
     //Go through all 8 Bits
@@ -190,7 +190,7 @@ void max7219::convert_Data_to_binary(int Data, int segment){
     }
 }
 
-void max7219::send_Data() {
+void MAX7219::send_Data() {
     gpio_put(Load_Pin, false); //set Load Pin to low
 
     for (int j = 3; j >= 0; --j) {
@@ -216,7 +216,7 @@ void max7219::send_Data() {
 
 //Matrix Functions -----------------------------------------------------------------------------------------------------
 
-void max7219::init_8x8_Matrix() {
+void MAX7219::init_8x8_Matrix() {
 
     //Init the Matrix Display
     power_state(true, true, true, true); //turn on the Display
@@ -231,7 +231,7 @@ void max7219::init_8x8_Matrix() {
     refresh(); //Send the empty Matrix Array to the Display
 }
 
-void max7219::Matrix_clear(int segment) {
+void MAX7219::Matrix_clear(int segment) {
     for (int x = 0; x < 8; ++x) {
         convert_Address_to_binary(x+1, segment);
 
@@ -244,11 +244,11 @@ void max7219::Matrix_clear(int segment) {
     }
 }
 
-void max7219::Matrix_set(int x, int y, bool state) {
+void MAX7219::Matrix_set(int x, int y, bool state) {
     Matrix_dot[x][y] = state; //set the x y coordinate LED to state
 }
 
-void max7219::refresh() {
+void MAX7219::refresh() {
 
     for (int i = 0; i < 4; ++i) {
         for (int y = 0; y < 8; ++y) {
@@ -269,7 +269,7 @@ void max7219::refresh() {
 
 //Other ----------------------------------------------------------------------------------------------------------------
 
-void max7219::test_pattern() {
+void MAX7219::test_pattern() {
 
     convert_Data_to_binary(0, 0);
     convert_Data_to_binary(0, 1);
@@ -292,17 +292,9 @@ void max7219::test_pattern() {
             }
         }
     }
-
-
-
-
-
-
-
-
 }
 
-void max7219::send_Data_decimal(int import[4][8]) {
+void MAX7219::send_Data_decimal(int import[4][8]) {
     gpio_put(Load_Pin, false); //set Load Pin to low
 
     for (int j = 3; j >= 0; --j) {
