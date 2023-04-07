@@ -10,13 +10,16 @@ class Matrix_Numbers {
 
 public:
     Matrix_Numbers();
-    void update_qudrant(int number, int qudrant);
-    void export_array(bool *export_Matrix_Dot);
+    int Matrix_dots[4][8];
+    void set_time(int hour_left, int hour_right, int minute_left, int minute_right);
 
 private:
-    bool Matrix_dot[8][8]; //Matrix with states for all dots
 
+    void clear_segments();
+    void set_segment_state(int segment, int number);
 
+    void add_seperator(int segment, int offset);
+    void segment_offset(int segment, int offset);
 };
 
 
