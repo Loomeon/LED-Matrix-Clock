@@ -57,14 +57,14 @@ void Segment_States::set_segment_state(int segment, int number) {
             - - - - - X X -
             */
 
-            Matrix_dots[segment][0] = 0b00011110;
-            Matrix_dots[segment][1] = 0b00111110;
-            Matrix_dots[segment][2] = 0b01110110;
+            Matrix_dots[segment][0] = 0b01111000;
+            Matrix_dots[segment][1] = 0b01111100;
+            Matrix_dots[segment][2] = 0b01101110;
             Matrix_dots[segment][3] = 0b01100110;
-            Matrix_dots[segment][4] = 0b00000110;
-            Matrix_dots[segment][5] = 0b00000110;
-            Matrix_dots[segment][6] = 0b00000110;
-            Matrix_dots[segment][7] = 0b00000110;
+            Matrix_dots[segment][4] = 0b01100000;
+            Matrix_dots[segment][5] = 0b01100000;
+            Matrix_dots[segment][6] = 0b01100000;
+            Matrix_dots[segment][7] = 0b01100000;
 
             break;
 
@@ -81,12 +81,12 @@ void Segment_States::set_segment_state(int segment, int number) {
             - X X X X X X -
             */
 
-            Matrix_dots[segment][0] = 0b01111100;
+            Matrix_dots[segment][0] = 0b00111110;
             Matrix_dots[segment][1] = 0b01111110;
-            Matrix_dots[segment][2] = 0b00000110;
-            Matrix_dots[segment][3] = 0b00111110;
-            Matrix_dots[segment][4] = 0b01111100;
-            Matrix_dots[segment][5] = 0b01100000;
+            Matrix_dots[segment][2] = 0b01100000;
+            Matrix_dots[segment][3] = 0b01111100;
+            Matrix_dots[segment][4] = 0b00111110;
+            Matrix_dots[segment][5] = 0b00000110;
             Matrix_dots[segment][6] = 0b01111110;
             Matrix_dots[segment][7] = 0b01111110;
 
@@ -105,14 +105,14 @@ void Segment_States::set_segment_state(int segment, int number) {
             - X X X X X - -
             */
 
-            Matrix_dots[segment][0] = 0b01111100;
+            Matrix_dots[segment][0] = 0b00111110;
             Matrix_dots[segment][1] = 0b01111110;
-            Matrix_dots[segment][2] = 0b00000110;
-            Matrix_dots[segment][3] = 0b01111100;
-            Matrix_dots[segment][4] = 0b01111100;
-            Matrix_dots[segment][5] = 0b00000110;
+            Matrix_dots[segment][2] = 0b01100000;
+            Matrix_dots[segment][3] = 0b00111110;
+            Matrix_dots[segment][4] = 0b01111110;
+            Matrix_dots[segment][5] = 0b01100000;
             Matrix_dots[segment][6] = 0b01111110;
-            Matrix_dots[segment][7] = 0b01111100;
+            Matrix_dots[segment][7] = 0b00111110;
 
             break;
 
@@ -129,14 +129,14 @@ void Segment_States::set_segment_state(int segment, int number) {
             - - - - X X - -
             */
 
-            Matrix_dots[segment][0] = 0b00001100;
+            Matrix_dots[segment][0] = 0b00110000;
             Matrix_dots[segment][1] = 0b00011000;
-            Matrix_dots[segment][2] = 0b00110000;
-            Matrix_dots[segment][3] = 0b01101100;
+            Matrix_dots[segment][2] = 0b00001100;
+            Matrix_dots[segment][3] = 0b00110110;
             Matrix_dots[segment][4] = 0b01111110;
             Matrix_dots[segment][5] = 0b01111110;
-            Matrix_dots[segment][6] = 0b00001100;
-            Matrix_dots[segment][7] = 0b00001100;
+            Matrix_dots[segment][6] = 0b00110000;
+            Matrix_dots[segment][7] = 0b00110000;
 
             break;
 
@@ -155,12 +155,12 @@ void Segment_States::set_segment_state(int segment, int number) {
 
             Matrix_dots[segment][0] = 0b01111110;
             Matrix_dots[segment][1] = 0b01111110;
-            Matrix_dots[segment][2] = 0b01100000;
-            Matrix_dots[segment][3] = 0b01111100;
+            Matrix_dots[segment][2] = 0b00000110;
+            Matrix_dots[segment][3] = 0b00111110;
             Matrix_dots[segment][4] = 0b01111110;
-            Matrix_dots[segment][5] = 0b00000110;
+            Matrix_dots[segment][5] = 0b01100000;
             Matrix_dots[segment][6] = 0b01111110;
-            Matrix_dots[segment][7] = 0b01111100;
+            Matrix_dots[segment][7] = 0b00111110;
 
             break;
 
@@ -178,9 +178,9 @@ void Segment_States::set_segment_state(int segment, int number) {
             */
 
             Matrix_dots[segment][0] = 0b00111100;
-            Matrix_dots[segment][1] = 0b01111100;
-            Matrix_dots[segment][2] = 0b01100000;
-            Matrix_dots[segment][3] = 0b01111100;
+            Matrix_dots[segment][1] = 0b00111110;
+            Matrix_dots[segment][2] = 0b00000110;
+            Matrix_dots[segment][3] = 0b00111110;
             Matrix_dots[segment][4] = 0b01111110;
             Matrix_dots[segment][5] = 0b01100110;
             Matrix_dots[segment][6] = 0b01111110;
@@ -203,12 +203,12 @@ void Segment_States::set_segment_state(int segment, int number) {
 
             Matrix_dots[segment][0] = 0b01111110;
             Matrix_dots[segment][1] = 0b01111110;
-            Matrix_dots[segment][2] = 0b00000110;
-            Matrix_dots[segment][3] = 0b00001100;
+            Matrix_dots[segment][2] = 0b01100000;
+            Matrix_dots[segment][3] = 0b00110000;
             Matrix_dots[segment][4] = 0b00011000;
-            Matrix_dots[segment][5] = 0b00110000;
-            Matrix_dots[segment][6] = 0b01100000;
-            Matrix_dots[segment][7] = 0b01000000;
+            Matrix_dots[segment][5] = 0b00001100;
+            Matrix_dots[segment][6] = 0b00000110;
+            Matrix_dots[segment][7] = 0b00000010;
 
             break;
 
@@ -253,9 +253,9 @@ void Segment_States::set_segment_state(int segment, int number) {
             Matrix_dots[segment][1] = 0b01111110;
             Matrix_dots[segment][2] = 0b01100110;
             Matrix_dots[segment][3] = 0b01111110;
-            Matrix_dots[segment][4] = 0b00111110;
-            Matrix_dots[segment][5] = 0b00000110;
-            Matrix_dots[segment][6] = 0b00111110;
+            Matrix_dots[segment][4] = 0b01111100;
+            Matrix_dots[segment][5] = 0b01100000;
+            Matrix_dots[segment][6] = 0b01111100;
             Matrix_dots[segment][7] = 0b00111100;
 
             break;
@@ -274,14 +274,14 @@ void Segment_States::set_segment_state(int segment, int number) {
             - - - - X X X -
             */
 
-            Matrix_dots[segment][0] = 0b11001110;
-            Matrix_dots[segment][1] = 0b11011110;
+            Matrix_dots[segment][0] = 0b01110011;
+            Matrix_dots[segment][1] = 0b01111011;
             Matrix_dots[segment][2] = 0b00011000;
             Matrix_dots[segment][3] = 0b00011000;
             Matrix_dots[segment][4] = 0b00011000;
             Matrix_dots[segment][5] = 0b00011000;
-            Matrix_dots[segment][6] = 0b00011110;
-            Matrix_dots[segment][7] = 0b00001110;
+            Matrix_dots[segment][6] = 0b01111000;
+            Matrix_dots[segment][7] = 0b01110000;
 
             break;
 
@@ -320,63 +320,16 @@ void Segment_States::set_segment_state(int segment, int number) {
             X X - - - - X -
             */
 
-            Matrix_dots[segment][0] = 0b01000011;
+            Matrix_dots[segment][0] = 0b11000010;
             Matrix_dots[segment][1] = 0b11100111;
-            Matrix_dots[segment][2] = 0b01001110;
-            Matrix_dots[segment][3] = 0b00011100;
-            Matrix_dots[segment][4] = 0b00111000;
-            Matrix_dots[segment][5] = 0b01110010;
+            Matrix_dots[segment][2] = 0b01110010;
+            Matrix_dots[segment][3] = 0b00111000;
+            Matrix_dots[segment][4] = 0b00011100;
+            Matrix_dots[segment][5] = 0b01001110;
             Matrix_dots[segment][6] = 0b11100111;
-            Matrix_dots[segment][7] = 0b11000010;
+            Matrix_dots[segment][7] = 0b01000011;
 
             break;
-
-        case 14:
-            /*
-            - X X X X X X -
-            - X X X X X X -
-            - X X - - - - -
-            - X X X X X X -
-            - X X X X X X -
-            - X X - - - - -
-            - X X X X X X -
-            - X X X X X X -
-            */
-
-            Matrix_dots[segment][0] = 0b01111110;
-            Matrix_dots[segment][1] = 0b01111110;
-            Matrix_dots[segment][2] = 0b01100000;
-            Matrix_dots[segment][3] = 0b01111110;
-            Matrix_dots[segment][4] = 0b01111110;
-            Matrix_dots[segment][5] = 0b01100000;
-            Matrix_dots[segment][6] = 0b01111110;
-            Matrix_dots[segment][7] = 0b01111110;
-
-            break;
-
-        case 15:
-            /*
-            - X X X X X - -
-            - X X X X X X -
-            - X X - - X X -
-            - X X - - X X -
-            - X X X X X - -
-            - X X X X X - -
-            - X X - X X X -
-            - X X - - X X -
-            */
-
-            Matrix_dots[segment][0] = 0b01111100;
-            Matrix_dots[segment][1] = 0b01111110;
-            Matrix_dots[segment][2] = 0b01100110;
-            Matrix_dots[segment][3] = 0b01100110;
-            Matrix_dots[segment][4] = 0b01111100;
-            Matrix_dots[segment][5] = 0b01111100;
-            Matrix_dots[segment][6] = 0b01101110;
-            Matrix_dots[segment][7] = 0b01100110;
-
-            break;
-
 
         default:
 
@@ -387,18 +340,26 @@ void Segment_States::set_segment_state(int segment, int number) {
 void Segment_States::set_time(int Hours, int Minutes) {
     clear_segments();
 
-    //Calculate the individual Digits of the Hour (only calculating the Digits that exist, no leading zero)
-    int Divisor = 1;
-    int Segment = 1; //Start at the right segment
 
-    //Go Through all existing Digits
-    while (Hours/Divisor != 0){
-        set_segment_state(Segment, Hours/Divisor%10);
+    if(Hours > 0){
+        //Calculate the individual Digits of the Hour (only calculating the Digits that exist, no leading zero)
+        int Divisor = 1;
+        int Segment = 1; //Start at the right segment
 
-        //Increment Divisor and Decrement Segment
-        Divisor *= 10;
-        Segment--;
+        //Go Through all existing Digits
+        while (Hours/Divisor != 0){
+            set_segment_state(Segment, Hours/Divisor%10);
+
+            //Increment Divisor and Decrement Segment
+            Divisor *= 10;
+            Segment--;
+        }
     }
+    else{
+        //If the time is 0:XX, the 0 has to be set manually
+        set_segment_state(1, 0);
+    }
+
 
     //Calculating the Individual Digits of the Minutes (All of them, if a Number is only 1 Digits long it has leading zeros)
     set_segment_state(2, Minutes/10%10);
@@ -409,8 +370,8 @@ void Segment_States::set_time(int Hours, int Minutes) {
     segment_offset(2, 1); //Move the number in segment 2 1 position to the right
 
     //Add the Dot (left and right half to the middle segments)
-    add_separator(1, 7); //add the separator dots (shifted 7 to the right) to segment 1
-    add_separator(2, 0); //add the separator dots to segment 2
+    add_separator(1, 0); //add the separator dots (shifted 7 to the right) to segment 1
+    add_separator(2, 7); //add the separator dots to segment 2
 }
 
 void Segment_States::add_separator(int segment, int offset) {
@@ -431,7 +392,7 @@ void Segment_States::segment_offset(int segment, int offset) {
     if (offset > 0){
         //Go through all lines of the display
         for (int i = 0; i < 8; ++i) {
-            Matrix_dots[segment][i] = Matrix_dots[segment][i] >> offset; //Move the dots in a line offset numbers to the right
+            Matrix_dots[segment][i] = Matrix_dots[segment][i] << offset; //Move the dots in a line offset numbers to the right
         }
     }
 
@@ -440,7 +401,7 @@ void Segment_States::segment_offset(int segment, int offset) {
 
         //Go through all lines of the display
         for (int i = 0; i < 8; ++i) {
-            Matrix_dots[segment][i] = Matrix_dots[segment][i] << offset; //Move the dots in a line offset numbers to the left
+            Matrix_dots[segment][i] = Matrix_dots[segment][i] >> offset; //Move the dots in a line offset numbers to the left
         }
     }
 

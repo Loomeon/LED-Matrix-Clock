@@ -37,10 +37,15 @@ int main() {
     Segment_States Segments;
 
     Matrix.init_8x8_Matrix();
-    Segments.set_time(time.hour, time.min);
-    Matrix.send_Data_decimal(Segments.Matrix_dots);
 
     while(1){
+        for (int i = 0; i < 24; ++i) {
+            for (int j = 0; j < 60; ++j) {
+                Segments.set_time(i, j);
+                Matrix.send_Data_decimal(Segments.Matrix_dots);
 
+                sleep_ms(100);
+            }
+        }
     }
 }

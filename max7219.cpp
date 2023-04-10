@@ -196,18 +196,18 @@ void MAX7219::send_Data() {
     for (int j = 3; j >= 0; --j) {
         for (int i = 0; i < 8; ++i) {
             gpio_put(Clock_Pin, false); //Disable Read on the max7219
-            sleep_us(1);
             gpio_put(Data_Pin, Address_bin[j][i]); //set the Data Pin to value
-            sleep_us(1);
             gpio_put(Clock_Pin, true); //Enable Read on the max7219
+
+            sleep_us(1);
         }
 
         for (int i = 0; i < 8; ++i) {
             gpio_put(Clock_Pin, false); //Disable Read on the max7219
-            sleep_us(1);
             gpio_put(Data_Pin, Data_bin[j][i]); //set the Data Pin to value
-            sleep_us(1);
             gpio_put(Clock_Pin, true); //Enable Read on the max7219
+
+            sleep_us(1);
         }
     }
 
@@ -221,7 +221,7 @@ void MAX7219::init_8x8_Matrix() {
     //Init the Matrix Display
     power_state(true, true, true, true); //turn on the Display
     decode_mode(0x00, 0x00,0x00,0x00); //use no decode mode
-    intensity(0x00, 0x00, 0x00, 0x00); //Use the lowest brightness
+    intensity(0x0F, 0x0F, 0x0F, 0x0F); //Use the lowest brightness
     digits(0x7, 0x7, 0x7, 0x7); //Use all 8 Lines of the Matrix
 
     for (int i = 0; i < 4; ++i) {
@@ -236,9 +236,7 @@ void MAX7219::Matrix_clear(int segment) {
         convert_Address_to_binary(x+1, segment);
 
         for (int y = 0; y < 8; ++y) {
-            Matrix_set(x,y,false);
-
-            convert_Data_to_binary(x+1, segment);
+            convert_Data_to_binary(0, segment);
             send_Data();
         }
     }
@@ -295,26 +293,12 @@ void MAX7219::test_pattern() {
 }
 
 void MAX7219::send_Data_decimal(int import[4][8]) {
-    gpio_put(Load_Pin, false); //set Load Pin to low
 
-    for (int j = 3; j >= 0; --j) {
-        for (int i = 0; i < 8; ++i) {
-            gpio_put(Clock_Pin, false); //Disable Read on the max7219
-            sleep_us(1);
-            gpio_put(Data_Pin, Address_bin[j][i]); //set the Data Pin to value
-            sleep_us(1);
-            gpio_put(Clock_Pin, true); //Enable Read on the max7219
+    for (int j = 0; j < 8; ++j) {
+        for (int i = 0; i < 4; ++i) {
+            convert_Address_to_binary(j+1, i);
+            convert_Data_to_binary(import[i][7-j], i);
         }
-
-        for (int i = 0; i < 8; ++i) {
-            gpio_put(Clock_Pin, false); //Disable Read on the max7219
-            sleep_us(1);
-            convert_Data_to_binary(import[j][i], j);
-            gpio_put(Data_Pin, Data_bin[j][i]); //set the Data Pin to value
-            sleep_us(1);
-            gpio_put(Clock_Pin, true); //Enable Read on the max7219
-        }
+        send_Data();
     }
-
-    gpio_put(Load_Pin, true); //Load the Bits into the max7219
 }
