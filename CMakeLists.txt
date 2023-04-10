@@ -13,7 +13,7 @@ pico_sdk_init()
 
 # rest of your project
 
-add_executable(Matrix_Clock main.cpp max7219.cpp max7219.h Segment_States.cpp Segment_States.h)
+add_executable(Matrix_Clock main.cpp max7219.cpp max7219.h Segment_States.cpp Segment_States.h pico_rtc.cpp pico_rtc.h)
 
 # Add all the needed libraries
 target_link_libraries(Matrix_Clock pico_stdlib hardware_rtc pico_multicore)

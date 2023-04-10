@@ -42,7 +42,12 @@ MAX7219::MAX7219(int Data, int Clock, int Load){
 
 //Setting Register------------------------------------------------------------------------------------------------------
 
-void MAX7219::decode_mode(int mode_seg0, int mode_seg1, int mode_seg2, int mode_seg3) {
+//Set the decode mode for each segment
+void MAX7219::decode_mode(int mode_seg0, //Segment 0
+                          int mode_seg1, //Segment 1
+                          int mode_seg2, //Segment 2
+                          int mode_seg3 //Segment 3
+                          ) {
     /* Decode-Mode Register (0x9) - Values
      * 0x0 - No Decode for Digits 0-7
      * 0x1 - Code B Decode for Digits 1-7
@@ -64,7 +69,12 @@ void MAX7219::decode_mode(int mode_seg0, int mode_seg1, int mode_seg2, int mode_
     send_Data();
 }
 
-void MAX7219::intensity(int brightness_seg0, int brightness_seg1, int brightness_seg2, int brightness_seg3){
+//Set the intensity for each segment
+void MAX7219::intensity(int brightness_seg0, //Segment 0
+                        int brightness_seg1, //Segment 1
+                        int brightness_seg2, //Segment 2
+                        int brightness_seg3 //Segment 3
+                        ){
     /* Intensity Register (0xA) - Values
      * 0x0 - Minimum Intensity
      * ... (All Values in between)
@@ -86,7 +96,12 @@ void MAX7219::intensity(int brightness_seg0, int brightness_seg1, int brightness
     send_Data();
 }
 
-void MAX7219::digits(int Mode_seg0, int Mode_seg1, int Mode_seg2, int Mode_seg3) {
+//Set the amount of displayed rows for each segment
+void MAX7219::digits(int Mode_seg0, //Segment 0
+                     int Mode_seg1, //Segment 1
+                     int Mode_seg2, //Segment 2
+                     int Mode_seg3 //Segment 3
+                     ) {
     /* Scan-Limit Register (0xB) - Values
      * 0x0 - Only Display Digit 0
      * 0x1 - Display Digit 0 1
@@ -115,7 +130,12 @@ void MAX7219::digits(int Mode_seg0, int Mode_seg1, int Mode_seg2, int Mode_seg3)
     send_Data();
 }
 
-void MAX7219::power_state(bool state_seg0, bool state_seg1, bool state_seg2, bool state_seg3){
+//Set the power state for each segment
+void MAX7219::power_state(bool state_seg0, //Segment 0
+                          bool state_seg1, //Segment 1
+                          bool state_seg2, //Segment 2
+                          bool state_seg3 //Segment 3
+                          ){
     /* Shutdown Register (0xC) - Values
      * 0x0 - Shutdown Mode
      * 0x1 - Normal Operation
@@ -135,7 +155,12 @@ void MAX7219::power_state(bool state_seg0, bool state_seg1, bool state_seg2, boo
     send_Data();
 }
 
-void MAX7219::Display_test(bool state_seg0, bool state_seg1, bool state_seg2, bool state_seg3) {
+//Enable display test for each segment
+void MAX7219::Display_test(bool state_seg0, //Segment 0
+                           bool state_seg1, //Segment 1
+                           bool state_seg2, //Segment 2
+                           bool state_seg3 //Segment 3
+                           ) {
     /* Display-Test Register (0xF) - Values
      * 0x0 - 0x0 - Normal Operation
      * 0x1 - Display Test Mode
@@ -157,7 +182,10 @@ void MAX7219::Display_test(bool state_seg0, bool state_seg1, bool state_seg2, bo
 
 //Converting and Transferring functions --------------------------------------------------------------------------------
 
-void MAX7219::convert_Address_to_binary(int Address, int segment){
+//Converting a number into it's binary number and stores it in Address_bin
+void MAX7219::convert_Address_to_binary(int Address, //Address as a decimal or hexadecimal number (0-8)
+                                        int segment //The segment which address should be set (0-3)
+                                        ){
     int bit_selector = 1; // 0b00000001
 
     //Go through all 8 Bits
@@ -173,7 +201,10 @@ void MAX7219::convert_Address_to_binary(int Address, int segment){
     }
 }
 
-void MAX7219::convert_Data_to_binary(int Data, int segment){
+//Converting a number into it's binary number and stores it in Data_bin
+void MAX7219::convert_Data_to_binary(int Data, //Data as a decimal or hexadecimal number (0-8)
+                                     int segment //The segment which address should be set (0-3)
+                                     ){
     int bit_selector = 1; // 0b00000001
 
     //Go through all 8 Bits
@@ -190,6 +221,7 @@ void MAX7219::convert_Data_to_binary(int Data, int segment){
     }
 }
 
+//Sending Data to the Address for all 4 segments
 void MAX7219::send_Data() {
     gpio_put(Load_Pin, false); //set Load Pin to low
 
@@ -216,6 +248,7 @@ void MAX7219::send_Data() {
 
 //Matrix Functions -----------------------------------------------------------------------------------------------------
 
+//Set all registers to the right values for a 8x8 LED matrix
 void MAX7219::init_8x8_Matrix() {
 
     //Init the Matrix Display
@@ -231,7 +264,9 @@ void MAX7219::init_8x8_Matrix() {
     refresh(); //Send the empty Matrix Array to the Display
 }
 
-void MAX7219::Matrix_clear(int segment) {
+//Clear one LED Matrix segment
+void MAX7219::Matrix_clear(int segment //Segment to be cleared
+) {
     for (int x = 0; x < 8; ++x) {
         convert_Address_to_binary(x+1, segment);
 
@@ -242,10 +277,15 @@ void MAX7219::Matrix_clear(int segment) {
     }
 }
 
-void MAX7219::Matrix_set(int x, int y, bool state) {
+//Set a specific dot to on or off ---- update to work with 4 segments
+void MAX7219::Matrix_set(int x, //column (left 0 to right 7)
+                         int y, //line (top 0 to bottom 7)
+                         bool state //on or off
+                         ) {
     Matrix_dot[x][y] = state; //set the x y coordinate LED to state
 }
 
+//Send all the dot information that has been set with Matrix_set to the Matrix ---- update to work with 4 segments
 void MAX7219::refresh() {
 
     for (int i = 0; i < 4; ++i) {
@@ -267,6 +307,7 @@ void MAX7219::refresh() {
 
 //Other ----------------------------------------------------------------------------------------------------------------
 
+//A simple test pattern to send all binary states to each segment
 void MAX7219::test_pattern() {
 
     convert_Data_to_binary(0, 0);
@@ -292,7 +333,9 @@ void MAX7219::test_pattern() {
     }
 }
 
-void MAX7219::send_Data_decimal(int import[4][8]) {
+//Directly send data from a decimal or hexadecimal array to the LED matrix
+void MAX7219::send_Data_decimal(int import[4][8] //Array with 8 rows for all 4 segments
+) {
 
     for (int j = 0; j < 8; ++j) {
         for (int i = 0; i < 4; ++i) {
