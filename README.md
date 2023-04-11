@@ -12,6 +12,8 @@ To be able to compile this project you have to:
 
 # Project Overview
 
+![IMG_0108](https://user-images.githubusercontent.com/115210873/231025742-5a0bc368-a2f9-4a57-b80c-614c7f6d6b83.jpeg)
+
 This is a Project to use a Raspberry Pi Pico with a LED Matrix to display the time, temperature and humidity.
 
 Currently, the Pi Pico can control the LED Matrix and keep track of the Time, but nothing else.
