@@ -31,7 +31,7 @@ int main() {
     Segment_States Segments;
     pico_rtc rtc_time;
 
-    rtc_time.set_time(15,38);
+    rtc_time.set_time(12,0);
 
     Matrix.init_8x8_Matrix();
 
