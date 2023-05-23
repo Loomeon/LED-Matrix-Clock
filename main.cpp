@@ -30,14 +30,6 @@ void callback_set_min(uint gpio, uint32_t events);
 
 void callback_set_min(uint gpio, uint32_t events) {
 
-    //Increase the Minute and check for an overflow
-    if(min == 59){
-        min = 0;
-    }
-    else{
-        min++;
-    }
-
     //Store the current time
     uint64_t start_time = to_ms_since_boot(get_absolute_time());
 
@@ -47,23 +39,22 @@ void callback_set_min(uint gpio, uint32_t events) {
         //If the button is held down for 3 seconds, enter this if statement
         uint32_t current_time = to_ms_since_boot(get_absolute_time());
         if (current_time - start_time >= 3000) {
+            min--; //Decrement the Min by one, because that would be the currently displayed value
             Matrix.power_state( true, true, false, false); //Only show the Hour Segments
             gpio_set_irq_enabled_with_callback(3, GPIO_IRQ_EDGE_RISE, true, &callback_set_hour); //Switch the IRQ to set hour
             break;
         }
     }
 
+    //Increase the Minute and check for an overflow
+    min++;
+    if(min > 59){
+        min = 0;
+    }
+
 }
 
 void callback_set_hour(uint gpio, uint32_t events) {
-
-    //Increase the Hour and check for an overflow
-    if(hour == 23){
-        hour = 0;
-    }
-    else{
-        hour++;
-    }
 
     //Store the current time
     uint64_t start_time = to_ms_since_boot(get_absolute_time());
@@ -74,6 +65,7 @@ void callback_set_hour(uint gpio, uint32_t events) {
         //If the button is held down for 3 seconds, enter this if statement
         uint32_t current_time = to_ms_since_boot(get_absolute_time());
         if (current_time - start_time >= 3000) {
+            hour--; //Decrement the Hour by one, because that would be the currently displayed value
             state=4;
             Matrix.power_state( true, true, true, true);
             gpio_set_irq_enabled_with_callback(3, GPIO_IRQ_EDGE_RISE, true, &callback_switch);  //Switch the IRQ back to the switch menu
@@ -81,6 +73,11 @@ void callback_set_hour(uint gpio, uint32_t events) {
         }
     }
 
+    //Increase the Hour and check for an overflow
+    hour++;
+    if(hour > 24){
+        hour = 0;
+    }
 }
 
 
@@ -161,7 +158,7 @@ int main() {
 
                 //Set rtc to new time
             case 4:
-                rtc_time.set_time(hour-1, min-1);
+                rtc_time.set_time(hour, min);
                 state = 0;
                 break;
 
