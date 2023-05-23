@@ -44,3 +44,24 @@ void pico_rtc::get_time(int8_t &hours, //Returns hours from rtc
     hours = pico_rtc_time.hour;
     minutes = pico_rtc_time.min;
 }
+
+void pico_rtc::increase_minute(){
+
+    if(pico_rtc_time.min == 59){
+        pico_rtc_time.min = 0;
+    }
+    else{
+        pico_rtc_time.min++;
+    }
+
+
+}
+
+void pico_rtc::increase_hour(){
+    if(pico_rtc_time.hour == 23){
+        pico_rtc_time.hour = 0;
+    }
+    else{
+        pico_rtc_time.hour++;
+    }
+}

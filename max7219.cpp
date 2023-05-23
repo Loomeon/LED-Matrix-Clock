@@ -148,9 +148,9 @@ void MAX7219::power_state(bool state_seg0, //Segment 0
     convert_Address_to_binary(0x0C, 3);
 
     convert_Data_to_binary(state_seg0, 0);
-    convert_Data_to_binary(state_seg0, 1);
-    convert_Data_to_binary(state_seg0, 2);
-    convert_Data_to_binary(state_seg0, 3);
+    convert_Data_to_binary(state_seg1, 1);
+    convert_Data_to_binary(state_seg2, 2);
+    convert_Data_to_binary(state_seg3, 3);
 
     send_Data();
 }
@@ -254,7 +254,7 @@ void MAX7219::init_8x8_Matrix() {
     //Init the Matrix Display
     power_state(true, true, true, true); //turn on the Display
     decode_mode(0x00, 0x00,0x00,0x00); //use no decode mode
-    intensity(0x0F, 0x0F, 0x0F, 0x0F); //Use the lowest brightness
+    intensity(0x0, 0x0, 0x0, 0x0); //Use the lowest brightness
     digits(0x7, 0x7, 0x7, 0x7); //Use all 8 Lines of the Matrix
 
     for (int i = 0; i < 4; ++i) {

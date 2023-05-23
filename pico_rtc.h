@@ -13,6 +13,8 @@ public:
     pico_rtc();
     void get_time(int8_t &hours, int8_t &minutes); //Store the minutes and hours in the variables
     void set_time(int8_t hours, int8_t minutes); //Set hours and minutes to the given values, resets seconds to 0
+    void increase_minute();
+    void increase_hour();
 };
 
 
