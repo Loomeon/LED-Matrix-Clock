@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
 
-#include <tuple>
 #include "pico/stdlib.h"
-
 #include "pico/util/datetime.h"
 #include "hardware/gpio.h"
 #include "pico/multicore.h"
 #include "max7219.h"
 #include "Segment_States.h"
 #include "pico_rtc.h"
-
+#include <stdio.h>
+#include "DHT11.h"
 
 
 int8_t min;
@@ -21,8 +15,7 @@ int8_t hour;
 Segment_States Segments;
 pico_rtc rtc_time;
 MAX7219 Matrix(0, 2, 1);
-int state=0;
-
+int state=1;
 
 void callback_switch(uint gpio, uint32_t events);
 void callback_set_hour(uint gpio, uint32_t events);
@@ -116,6 +109,8 @@ void callback_switch(uint gpio, uint32_t events){
 }
 
 int main() {
+    stdio_init_all();
+
     gpio_init(0);
     gpio_init(1);
     gpio_init(2);
@@ -124,6 +119,8 @@ int main() {
     gpio_set_dir(1 , GPIO_OUT);
     gpio_set_dir(2 , GPIO_OUT);
 
+    gpio_init(4);
+    DHT11 Sensor(4);
 
     rtc_time.set_time(12,0);
 
@@ -135,20 +132,46 @@ int main() {
 
         switch (state) {
 
-                 //Display Time
+            //Display Time
             case 0:
-                    rtc_time.get_time(hour, min);
-                    Segments.set_time(hour, min);
+                rtc_time.get_time(hour, min);
+                Segments.set_time(hour, min);
                 break;
 
                 //Display Temperature
             case 1:
-                    Segments.set_temperature(42);
+                Segments.set_temperature(42);
+
+                Sensor.get_data();
+
+                for (int i = 0; i < 40; ++i) {
+                    if(Sensor.data[i]){
+                        printf("%d", 1);
+                    }
+                    else{
+                        printf("%d", 0);
+                    }
+                }
+
+                if(Sensor.convert_data()){
+                    printf("\nValid");
+                }
+                else{
+                    printf("\nNot Valid");
+                }
+
+
+                printf("\n%d | %f | %d | %f\n", Sensor.temperature, Sensor.temperature_decimal, Sensor.humidity, Sensor.humidity_decimal);
+
+
+
+                sleep_ms(5000);
+
                 break;
 
                 //Display Humidity
             case 2:
-                    Segments.set_humidity(69);
+                Segments.set_humidity(69);
                 break;
 
                 //Change time mode
