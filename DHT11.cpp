@@ -5,10 +5,12 @@
 #include "DHT11.h"
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
+#include <math.h>
 
 
 DHT11::DHT11(int Data_GPIO){
     Data_PIN=Data_GPIO;
+    gpio_init(Data_GPIO);
 }
 
 void DHT11::get_data(){
@@ -16,9 +18,9 @@ void DHT11::get_data(){
 
     gpio_set_dir(Data_PIN, GPIO_OUT);
     gpio_put(Data_PIN, false);
-    sleep_ms(20);
+    busy_wait_ms(20);
     gpio_set_dir(Data_PIN, GPIO_IN);
-    sleep_us(150);
+    busy_wait_us(150);
 
     read_state_change(true);
 
@@ -45,7 +47,7 @@ int DHT11::read_state_change(bool state) {
 
     while (gpio_get(Data_PIN) == state && count < 255) {
         ++count;
-        sleep_us(1);
+        busy_wait_us(1);
     }
 
     if(count < 255){
@@ -82,8 +84,11 @@ bool DHT11::convert_data() {
 
     humidity = temp[0];
     humidity_decimal = convertToFloat(temp[0], temp[1]);
+    test1 = temp[1];
+
     temperature = temp[2];
-    humidity_decimal = convertToFloat(temp[2], temp[3]);
+    temperature_decimal = convertToFloat(temp[2], temp[3]);
+    test2 = temp[3];
 
     //Check the Sum of Segment 0-4 with the Check Value
     if(temp[0]+temp[1]+temp[2]+temp[3]==temp[4]){
@@ -97,9 +102,9 @@ float DHT11::convertToFloat(int beforeDecimal, int afterDecimal) {
 
     //Shift before decimal value 8 bits to the left and add the behind decimal bits to the number
     int combinedBits = (beforeDecimal << 8) | afterDecimal;
-    //???
-    float result = static_cast<float>(combinedBits)/100.0;
-    //Profit
+    //after decimal is just a number between 0 and 9, divide that by 10.0f to convert it to float
+    // and get the behind decimal value then add to the before decimal
+    float result = beforeDecimal + afterDecimal/10.0f;
     return result;
 }
 

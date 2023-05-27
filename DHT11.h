@@ -32,8 +32,9 @@ public:
     int humidity;
     float humidity_decimal;
 
-    float convertToFloat(int beforeDecimal, int afterDecimal);
+    int test1, test2;
 
+    float convertToFloat(int beforeDecimal, int afterDecimal);
 };
 
 

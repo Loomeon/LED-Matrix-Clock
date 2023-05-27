@@ -15,7 +15,8 @@ int8_t hour;
 Segment_States Segments;
 pico_rtc rtc_time;
 MAX7219 Matrix(0, 2, 1);
-int state=1;
+int state=0;
+DHT11 Sensor(4);
 
 void callback_switch(uint gpio, uint32_t events);
 void callback_set_hour(uint gpio, uint32_t events);
@@ -59,7 +60,7 @@ void callback_set_hour(uint gpio, uint32_t events) {
         uint32_t current_time = to_ms_since_boot(get_absolute_time());
         if (current_time - start_time >= 3000) {
             hour--; //Decrement the Hour by one, because that would be the currently displayed value
-            state=4;
+            rtc_time.set_time(hour, min);
             Matrix.power_state( true, true, true, true);
             gpio_set_irq_enabled_with_callback(3, GPIO_IRQ_EDGE_RISE, true, &callback_switch);  //Switch the IRQ back to the switch menu
             break;
@@ -75,7 +76,6 @@ void callback_set_hour(uint gpio, uint32_t events) {
 
 
 void callback_switch(uint gpio, uint32_t events){
-    gpio_set_irq_enabled_with_callback(3, GPIO_IRQ_EDGE_RISE, false, &callback_switch); //Disable IRQ
 
     //Cycle through the States
     state++;
@@ -99,13 +99,63 @@ void callback_switch(uint gpio, uint32_t events){
         }
     }
 
-    //This check is only for after switching to the clock setting mode, it prevents the IRQ from being overwritten
-    if(state<3){
-        gpio_set_irq_enabled_with_callback(3, GPIO_IRQ_EDGE_RISE, true, &callback_switch);
+    switch (state) {
+
+        //Display Time
+        case 0:
+            Segments.set_time(hour, min);
+            break;
+
+            //Display Temperature
+        case 1:
+            Segments.set_temperature(Sensor.temperature);
+            break;
+
+            //Display Humidity
+        case 2:
+            Segments.set_humidity(Sensor.humidity);
+            break;
+
+            //Change time mode
+        case 3:
+            //Segments.set_time(hour, min);
+            break;
+
+            //Set rtc to new time
+        case 4:
+            rtc_time.set_time(hour, min);
+            state = 0;
+            break;
+
+            //in case there is an invalid mode, display time
+        default:
+            rtc_time.get_time(hour, min);
+            Segments.set_time(hour, min);
     }
 
-    //Wait here to prevent pressing the button multiple times
-    busy_wait_ms(200);
+    Matrix.send_Data_decimal(Segments.Matrix_dots);
+
+
+}
+
+bool Update_Sensor(struct repeating_timer *t){
+    Sensor.get_data();
+    Sensor.convert_data();
+
+    if(state == 1){
+        Segments.set_temperature(Sensor.temperature);
+    }
+    else if(state == 2){
+        Segments.set_humidity(Sensor.humidity);
+    }
+
+    return true;
+}
+
+bool Update_Clock(struct repeating_timer *t){
+    rtc_time.get_time(hour, min);
+    Segments.set_time(hour, min);
+    return true;
 }
 
 int main() {
@@ -119,78 +169,25 @@ int main() {
     gpio_set_dir(1 , GPIO_OUT);
     gpio_set_dir(2 , GPIO_OUT);
 
-    gpio_init(4);
-    DHT11 Sensor(4);
-
     rtc_time.set_time(12,0);
 
     Matrix.init_8x8_Matrix();
 
     gpio_set_irq_enabled_with_callback(3, GPIO_IRQ_EDGE_RISE, true, &callback_switch);
 
+    struct repeating_timer Sensor_timer;
+    add_repeating_timer_ms(5000, Update_Sensor, NULL, &Sensor_timer);
+
+    struct repeating_timer Clock_timer;
+    add_repeating_timer_ms(60000, Update_Clock, NULL, &Clock_timer);
+
+    //First read
+    rtc_time.get_time(hour, min);
+    Sensor.get_data();
+    Sensor.convert_data();
+    Segments.set_time(hour, min);
+
     while(1) {
 
-        switch (state) {
-
-            //Display Time
-            case 0:
-                rtc_time.get_time(hour, min);
-                Segments.set_time(hour, min);
-                break;
-
-                //Display Temperature
-            case 1:
-                Segments.set_temperature(42);
-
-                Sensor.get_data();
-
-                for (int i = 0; i < 40; ++i) {
-                    if(Sensor.data[i]){
-                        printf("%d", 1);
-                    }
-                    else{
-                        printf("%d", 0);
-                    }
-                }
-
-                if(Sensor.convert_data()){
-                    printf("\nValid");
-                }
-                else{
-                    printf("\nNot Valid");
-                }
-
-
-                printf("\n%d | %f | %d | %f\n", Sensor.temperature, Sensor.temperature_decimal, Sensor.humidity, Sensor.humidity_decimal);
-
-
-
-                sleep_ms(5000);
-
-                break;
-
-                //Display Humidity
-            case 2:
-                Segments.set_humidity(69);
-                break;
-
-                //Change time mode
-            case 3:
-                Segments.set_time(hour, min);
-                break;
-
-                //Set rtc to new time
-            case 4:
-                rtc_time.set_time(hour, min);
-                state = 0;
-                break;
-
-                //in case there is an invalid mode, display time
-            default:
-                rtc_time.get_time(hour, min);
-                Segments.set_time(hour, min);
-        }
-
-        Matrix.send_Data_decimal(Segments.Matrix_dots);
     }
 }

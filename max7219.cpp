@@ -231,7 +231,7 @@ void MAX7219::send_Data() {
             gpio_put(Data_Pin, Address_bin[j][i]); //set the Data Pin to value
             gpio_put(Clock_Pin, true); //Enable Read on the max7219
 
-            sleep_us(1);
+            busy_wait_us(1);
         }
 
         for (int i = 0; i < 8; ++i) {
@@ -239,7 +239,7 @@ void MAX7219::send_Data() {
             gpio_put(Data_Pin, Data_bin[j][i]); //set the Data Pin to value
             gpio_put(Clock_Pin, true); //Enable Read on the max7219
 
-            sleep_us(1);
+            busy_wait_us(1);
         }
     }
 
