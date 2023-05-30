@@ -13,27 +13,19 @@ class DHT11 {
 public:
     DHT11(int Data_GPIO);
 
-    void get_data();
-
-    int Data_PIN;
-
-    bool data[40]{};
-
-    int read_state_change(bool state);
-
-
-
-    bool convert_data();
-
-
     int temperature;
     float temperature_decimal;
-
     int humidity;
     float humidity_decimal;
 
-    int test1, test2;
+    void get_data();
+    bool convert_data();
 
+private:
+    int Data_PIN;
+    bool data[40]{};
+
+    int read_state_change(bool state);
     float convertToFloat(int beforeDecimal, int afterDecimal);
 };
 

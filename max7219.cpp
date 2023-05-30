@@ -9,6 +9,14 @@ MAX7219::MAX7219(int Data, int Clock, int Load){
     Data_Pin = Data;
     Clock_Pin = Clock;
     Load_Pin = Load;
+
+    gpio_init(Data_Pin);
+    gpio_init(Clock_Pin);
+    gpio_init(Load_Pin);
+
+    gpio_set_dir(Data_Pin , GPIO_OUT);
+    gpio_set_dir(Clock_Pin , GPIO_OUT);
+    gpio_set_dir(Load_Pin , GPIO_OUT);
 }
 
 /* Signal
@@ -112,9 +120,6 @@ void MAX7219::digits(int Mode_seg0, //Segment 0
      * 0x6 - Display Digit 0 1 2 3 4 5 6
      * 0x7 - Display Digit 0 1 2 3 4 5 6 7
      */
-
-
-
 
     //Set Address to "Scan Limit"
     convert_Address_to_binary(0x0B, 0);
@@ -246,6 +251,19 @@ void MAX7219::send_Data() {
     gpio_put(Load_Pin, true); //Load the Bits into the max7219
 }
 
+//Directly send data from a decimal or hexadecimal array to the LED matrix
+void MAX7219::send_Data_decimal(int import[4][8] //Array with 8 rows for all 4 segments
+) {
+
+    for (int j = 0; j < 8; ++j) {
+        for (int i = 0; i < 4; ++i) {
+            convert_Address_to_binary(j+1, i);
+            convert_Data_to_binary(import[i][7-j], i);
+        }
+        send_Data();
+    }
+}
+
 //Matrix Functions -----------------------------------------------------------------------------------------------------
 
 //Set all registers to the right values for a 8x8 LED matrix
@@ -277,14 +295,6 @@ void MAX7219::Matrix_clear(int segment //Segment to be cleared
     }
 }
 
-//Set a specific dot to on or off ---- update to work with 4 segments
-void MAX7219::Matrix_set(int x, //column (left 0 to right 7)
-                         int y, //line (top 0 to bottom 7)
-                         bool state //on or off
-                         ) {
-    Matrix_dot[x][y] = state; //set the x y coordinate LED to state
-}
-
 //Send all the dot information that has been set with Matrix_set to the Matrix ---- update to work with 4 segments
 void MAX7219::refresh() {
 
@@ -305,43 +315,3 @@ void MAX7219::refresh() {
     }
 }
 
-//Other ----------------------------------------------------------------------------------------------------------------
-
-//A simple test pattern to send all binary states to each segment
-void MAX7219::test_pattern() {
-
-    convert_Data_to_binary(0, 0);
-    convert_Data_to_binary(0, 1);
-    convert_Data_to_binary(0, 2);
-    convert_Data_to_binary(0, 3);
-
-    for (int z = 0; z < 4; ++z) {
-        //Go through all Digits / Rows
-        for (int i = 1; i <= 8; ++i) {
-            //Convert the Address into binary
-            convert_Address_to_binary(i, z);
-
-            //Go through all columns
-            for (int j = 0; j < 256; ++j) {
-                //Convert the Data into binary and send Address and Data
-                convert_Data_to_binary(j, z);
-                send_Data();
-
-                sleep_ms(5);
-            }
-        }
-    }
-}
-
-//Directly send data from a decimal or hexadecimal array to the LED matrix
-void MAX7219::send_Data_decimal(int import[4][8] //Array with 8 rows for all 4 segments
-) {
-
-    for (int j = 0; j < 8; ++j) {
-        for (int i = 0; i < 4; ++i) {
-            convert_Address_to_binary(j+1, i);
-            convert_Data_to_binary(import[i][7-j], i);
-        }
-        send_Data();
-    }
-}

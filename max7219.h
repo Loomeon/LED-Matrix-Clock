@@ -56,17 +56,9 @@ public:
     void Matrix_clear(int segment //Segment to be cleared
     );
 
-    //Set a specific dot to on or off ---- update to work with 4 segments
-    void Matrix_set(int x, //column (left 0 to right 7)
-                    int y, //line (top 0 to bottom 7)
-                    bool state //on or off
-                    );
-
     //Send all the dot information that has been set with Matrix_set to the Matrix ---- update to work with 4 segments
     void refresh();
 
-    //A simple test pattern to send all binary states to each segment
-    void test_pattern();
 
     //Set all registers to the right values for a 8x8 LED matrix
     void init_8x8_Matrix();

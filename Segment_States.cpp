@@ -126,9 +126,9 @@ void Segment_States::set_segment_state(int segment, //The segment to set (0-3)
         case 4:
 
             /*
-            - - - - X X - -
-            - - - X X - - -
-            - - X X - - - -
+            - X X - - - - -
+            - X X - - - - -
+            - X X - - - - -
             - X X - X X - -
             - X X X X X X -
             - X X X X X X -
@@ -136,9 +136,9 @@ void Segment_States::set_segment_state(int segment, //The segment to set (0-3)
             - - - - X X - -
             */
 
-            Matrix_dots[segment][0] = 0b00110000;
-            Matrix_dots[segment][1] = 0b00011000;
-            Matrix_dots[segment][2] = 0b00001100;
+            Matrix_dots[segment][0] = 0b00000110;
+            Matrix_dots[segment][1] = 0b00000110;
+            Matrix_dots[segment][2] = 0b00000110;
             Matrix_dots[segment][3] = 0b00110110;
             Matrix_dots[segment][4] = 0b01111110;
             Matrix_dots[segment][5] = 0b01111110;
@@ -200,22 +200,22 @@ void Segment_States::set_segment_state(int segment, //The segment to set (0-3)
             /*
             - X X X X X X -
             - X X X X X X -
+            - X X - - X X -
             - - - - - X X -
-            - - - - X X - -
-            - - - X X - - -
-            - - X X - - - -
-            - X X - - - - -
-            - X - - - - - -
+            - - - - - X X -
+            - - - - - X X -
+            - - - - - X X -
+            - - - - - X X -
             */
 
             Matrix_dots[segment][0] = 0b01111110;
             Matrix_dots[segment][1] = 0b01111110;
-            Matrix_dots[segment][2] = 0b01100000;
-            Matrix_dots[segment][3] = 0b00110000;
-            Matrix_dots[segment][4] = 0b00011000;
-            Matrix_dots[segment][5] = 0b00001100;
-            Matrix_dots[segment][6] = 0b00000110;
-            Matrix_dots[segment][7] = 0b00000010;
+            Matrix_dots[segment][2] = 0b01100110;
+            Matrix_dots[segment][3] = 0b01100000;
+            Matrix_dots[segment][4] = 0b01100000;
+            Matrix_dots[segment][5] = 0b01100000;
+            Matrix_dots[segment][6] = 0b01100000;
+            Matrix_dots[segment][7] = 0b01100000;
 
             break;
 

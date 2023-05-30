@@ -31,7 +31,7 @@ void pico_rtc::set_time(int8_t hours, //Set hours (0-23)
     pico_rtc_time.sec = 0;
 
     rtc_set_datetime(&pico_rtc_time); //Modify the rtc
-    sleep_us(64); //Wait for the rtc to update
+    busy_wait_us(64); //Wait for the rtc to update
 }
 
 //Set hours and minutes to the given values, resets seconds to 0
@@ -53,8 +53,6 @@ void pico_rtc::increase_minute(){
     else{
         pico_rtc_time.min++;
     }
-
-
 }
 
 void pico_rtc::increase_hour(){
