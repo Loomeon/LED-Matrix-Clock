@@ -69,6 +69,7 @@ Clone the Repository and initialise it:
 ```bash
 git clone -b master https://github.com/raspberrypi/pico-sdk.git
 cd pico-sdk
+git submodule update –init
 ```
 
 Install the [Packages for your System](https://github.com/raspberrypi/picotool) (This is for macOS with an ARM CPU):
