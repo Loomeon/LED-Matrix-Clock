@@ -65,11 +65,24 @@ The Font I created for the Matrix.
 
 A Guide and all necessary links can be found [here](https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html).
 
-To be able to compile this project you have to:
+Clone the Repository and initialise it:
+```bash
+git clone -b master https://github.com/raspberrypi/pico-sdk.git
+cd pico-sdk
+```
 
-1. Install the [Packages for your System](https://github.com/raspberrypi/picotool).
-2. Add the [PI Pico SDK](https://github.com/raspberrypi/pico-sdk) to your cmake environment.
-3. Copy `external/pico_sdk_import.cmake` from the SDK to this project folder.
+Install the [Packages for your System](https://github.com/raspberrypi/picotool) (This is for macOS with an ARM CPU):
+```bash
+brew tap Armbed/homebrew-formulae
+brew install arm-none-eabi-gcc cmake
+```
+
+Add the [PI Pico SDK](https://github.com/raspberrypi/pico-sdk) to your cmake environment (This is for CLion):
+
+In CLion `Build, Execution, Deployment → CMake` set Environment to `PICO_SDK_PATH=(SDK path)`.
+
+Then set Generator to Let CMake decide. After that copy `external/pico_sdk_import.cmake` from the SDK to this project folder.
+
 
 
 

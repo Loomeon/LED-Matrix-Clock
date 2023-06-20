@@ -68,7 +68,7 @@ public:
     );
 
 private:
-    int Data_Pin; //Pin for the Data transfer
+    int Data_Pin; //Pin for Data transfer
     int Clock_Pin; //Pin for Clock signal
     int Load_Pin; //Pin for Load signal
     bool Matrix_dot[8][8]{}; //Matrix with states for all dots

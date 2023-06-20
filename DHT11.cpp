@@ -7,16 +7,21 @@
 #include "hardware/gpio.h"
 
 DHT11::DHT11(int Data_GPIO){
+    //Copy GPIO Pin
     Data_PIN=Data_GPIO;
+
+    //Initialize GPIO Pin
     gpio_init(Data_GPIO);
 
+    //Set all values to zero
     humidity = 0;
     humidity_decimal = 0;
     temperature = 0;
     temperature_decimal = 0;
-
 }
 
+//Function to read Temperature, Humidity and Checksum from the DHT11
+//Stores 40 Bits of Data in bool data[40]
 void DHT11::get_data(){
     int count = 0;
 
@@ -51,24 +56,7 @@ void DHT11::get_data(){
     }
 }
 
-int DHT11::read_state_change(bool state) {
-    int count = 0;
-    int check = -1;
-
-    //Stay in while loop until the input value changes, wait 1 ms in every loop and increment count, stop if it needs longer than 255 ms
-    while (gpio_get(Data_PIN) == state && count < 255) {
-        ++count;
-        busy_wait_us(1);
-    }
-
-    //The value is below 255 return it, otherwise return -1
-    if(count < 255){
-        check = count;
-    }
-
-    return check;
-}
-
+//Converts the 40 Bits of Sensor Data into usable int and float values
 bool DHT11::convert_data() {
 
     //Assume that the Data is not Valid
@@ -108,7 +96,32 @@ bool DHT11::convert_data() {
     return valid;
 }
 
-float DHT11::convertToFloat(int beforeDecimal, int afterDecimal) {
+//Waits until the GPIO State changes from the check state or when 255 µs passed
+//Returns the time in µs it took to change the State
+int DHT11::read_state_change(bool state //Check state
+) {
+    int count = 0;
+    int check = -1;
+
+    //Stay in while loop until the input value changes, wait 1 ms in every loop and increment count, stop if it needs longer than 255 ms
+    while (gpio_get(Data_PIN) == state && count < 255) {
+        ++count;
+        busy_wait_us(1);
+    }
+
+    //The value is below 255 return it, otherwise return -1
+    if(count < 255){
+        check = count;
+    }
+
+    return check;
+}
+
+//Converts the two int parts of the decimal number intro a float value
+//Returns the combined float value
+float DHT11::convertToFloat(int beforeDecimal, //Normal int value
+                     int afterDecimal) { //Value behind the decimal, is going to be divided by 10 and added to Normal
+
     //After decimal is just a number between 0 and 9, divide that by 10.0f to convert it to float
     // and get the behind decimal value then add to the before decimal
     float result = beforeDecimal + afterDecimal/10.0f;
